@@ -1,8 +1,9 @@
 import express from "express"
-import { messageSend } from "../controler/messagecontroler.js"
-
+import { getAllMessage, messageSend } from "../controler/messagecontroler.js"
+import { isAdminAuthenticated } from "../middleware/auth.js"
 const router= express.Router()
 
 router.post("/send",messageSend)
+router.post("/allMessage",isAdminAuthenticated,getAllMessage)
 
 export default router;

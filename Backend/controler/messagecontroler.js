@@ -1,51 +1,24 @@
 import { Message } from "../models/messageScema.js";
+import { asyncerror } from "../middleware/asyncErrorMiddleware.js";
+import errorHandler from "../middleware/errorMiddleware.js"
 
-export const messageSend = async (req, res, next) => {
-    try {
-        console.log('Request body:', req.body);
-        
-        if (!req.body) {
-            return res.status(400).json({
-                success: false,
-                message: "No request body received"
-            });
-        }
-
-        const {firstName, lastName, email, phone, message} = req.body;
-
-        if (!firstName || !lastName || !email || !phone || !message) {
-            return res.status(400).json({
-                success: false,
-                message: "Please fill all required fields",
-                missing: {
-                    firstName: !firstName,
-                    lastName: !lastName,
-                    email: !email,
-                    phone: !phone,
-                    message: !message
-                }
-            });
-        }
-
-        const newMessage = await Message.create({
-            firstName,
-            lastName,
-            email,
-            phone,
-            message
-        });
-
-        res.status(201).json({
-            success: true,
-            message: "Message sent successfully",
-            data: newMessage
-        });
-    } catch (error) {
-        console.error('Message controller error:', error);
-        res.status(500).json({
-            success: false,
-            message: "Error processing message",
-            error: error.message
-        });
+export const messageSend =asyncerror( async (req, res, next) => {
+    const {firstName, lastName, email, phone, message} = req.body;
+     if (!firstName || !lastName || !email || !phone || !message){
+         return next(new errorHandler("please fill full form",400))
     }
-}
+     await Message.create({firstName, lastName, email, phone, message})
+     res.status(200).json({
+        success:true,
+        message:"message send successfully"
+     })
+})
+
+export const getAllMessage = asyncerror(async (req,res,next)=>{
+    const allmessage = await Message.find()
+    res.status(200).json({
+        success:true,
+        message:"all message",
+        data: allmessage
+     }) 
+})

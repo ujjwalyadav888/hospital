@@ -5,6 +5,9 @@ import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import { dbConnect } from "./db/dbconection.js";
 import messageRouter from "./router/messagerouter.js"
+import {errorMiddleware}from "./middleware/errorMiddleware.js"
+import userRouter from "./router/userRouter.js"
+import appointmentRouter from "./router/appointmentRouter"
 
 
 config({ path: "./config/.config.env" });
@@ -28,7 +31,10 @@ app.use(fileUpload({
 }))
 
 app.use("/api/v1/message", messageRouter)
+app.use("/api/v1/user", userRouter)
+app.use("/api/v1/appointment", appointmentRouter)
 
 dbConnect();
 
+app.use(errorMiddleware)
 export default app;
