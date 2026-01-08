@@ -7,7 +7,7 @@ import { dbConnect } from "./db/dbconection.js";
 import messageRouter from "./router/messagerouter.js"
 import {errorMiddleware}from "./middleware/errorMiddleware.js"
 import userRouter from "./router/userRouter.js"
-import appointmentRouter from "./router/appointmentRouter"
+import appointmentRouter from "./router/appointmentRouter.js"
 
 
 config({ path: "./config/.config.env" });
